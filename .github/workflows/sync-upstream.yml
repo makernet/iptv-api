@@ -34,20 +34,11 @@ jobs:
 
       - name: 排除工作流文件
         run: |
-          git reset HEAD .github/workflows/  # 排除工作流文件的修改
-          git checkout .github/workflows/    # 重新恢复工作流文件的原始状态
+          git reset HEAD .github/  # 排除工作流文件的修改
+          git checkout .github/    # 重新恢复工作流文件的原始状态
 
-      - name: 推送到新分支
+      - name: 推送到 Fork 仓库
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git checkout -b sync-upstream
-          git push origin sync-upstream # 推送到新分支，而不是直接推送到 master
-
-      - name: 创建 Pull Request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          title: 'Sync with upstream'
-          body: 'Merging changes from upstream repository'
-          base: master # 合并到主分支
-          head: sync-upstream # 新分支
+          git push origin master --force # 这里改为你的上游主要分支，一般可能是main或者master
