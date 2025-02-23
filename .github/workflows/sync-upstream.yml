@@ -34,8 +34,10 @@ jobs:
 
       - name: 排除工作流文件
         run: |
-          git reset HEAD .github/  # 排除工作流文件的修改
-          git checkout .github/    # 重新恢复工作流文件的原始状态
+          git reset HEAD .github/workflows/  # 排除.github工作流文件的修改
+          git checkout .github/workflows/    # 重新恢复.github工作流文件的原始状态
+          git add .                # 添加其它文件
+          git commit -m "同步上游代码，并忽略工作流文件"
 
       - name: 推送到 Fork 仓库
         env:
