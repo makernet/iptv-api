@@ -25,7 +25,7 @@ jobs:
           git fetch upstream
           git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
           git fetch upstream
-          git merge upstream/master --strategy-option theirs # 自动覆盖本地修改 合并上游的 master 分支，一般可能是main或者master
+          git merge upstream/master --allow-unrelated-histories --strategy-option theirs -X theirs # 自动覆盖本地修改 合并上游的 master 分支，一般可能是main或者master
 
       - name: 推送到 Fork 仓库
         env:
