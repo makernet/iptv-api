@@ -32,6 +32,11 @@ jobs:
           git fetch upstream
           git merge upstream/master --allow-unrelated-histories --strategy-option theirs -X theirs # 自动覆盖本地修改 合并上游的 master 分支，一般可能是main或者master
 
+      - name: 排除工作流文件
+        run: |
+          git reset HEAD .github/workflows/  # 排除工作流文件的修改
+          git checkout .github/workflows/    # 重新恢复工作流文件的原始状态
+
       - name: 推送到 Fork 仓库
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
