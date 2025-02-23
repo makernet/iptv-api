@@ -23,11 +23,11 @@ jobs:
         run: |
           git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
           git fetch upstream
-          git checkout main
+          git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
           git rebase upstream/master # 这里改为你的上游主要分支，一般可能是main或者master
 
       - name: 推送到 Fork 仓库
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git push origin main --force
+          git push origin master --force # 这里改为你的上游主要分支，一般可能是main或者master
