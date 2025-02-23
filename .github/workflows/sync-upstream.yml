@@ -19,6 +19,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: 配置 GitHub 身份验证
+        run: |
+          git config --global credential.helper 'store'
+          echo "https://github-actions[bot]:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+
       - name: 添加上游仓库
         run: |
           git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
