@@ -24,8 +24,10 @@ jobs:
           git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
           git fetch upstream
           git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
-          git merge upstream/master # 合并上游的 master 分支，一般可能是main或者master
-          git checkout --theirs # 用上游文件自动覆盖冲突的文件
+          git merge upstream/master --allow-unrelated-histories # 合并上游的 master 分支，一般可能是main或者master
+          git checkout --theirs <conflicted-file>  # 针对每个冲突文件，使用上游版本覆盖
+          git add <conflicted-file>  # 标记冲突文件已解决
+          git commit -m "Merge upstream/master with unrelated histories 强制合并上游仓库覆盖本仓库"  # 提交合并结果
 
       - name: 推送到 Fork 仓库
         env:
