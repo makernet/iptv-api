@@ -38,14 +38,15 @@ jobs:
           git reset HEAD .github/workflows/  # 排除.github工作流文件的修改
           git checkout .github/workflows/    # 重新恢复.github工作流文件的原始状态
           # 标记工作流文件为不被修改
-          git update-index --assume-unchanged .github/workflows/*
+          git update-index --assume-unchanged $(find .github/workflows -type f)
           
           # 删除 Git 中的工作流文件
           git add .                # 添加其它文件
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
           
           # 标记工作流文件为不被修改，确保它们不会被推送
-          git update-index --assume-unchanged .github/workflows/*
+          git update-index --assume-unchanged $(find .github/workflows -type f)
+
 
       - name: 推送到 Fork 仓库
         env:
