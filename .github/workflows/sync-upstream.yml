@@ -37,6 +37,9 @@ jobs:
 
       - name: 排除工作流文件
         run: |
+          git config core.sparseCheckout false
+          git rm -r --cached .github/workflows/  # 从 Git 的跟踪中移除该文件夹
+          rm -r .github/workflows/  # 删除本地 .github/workflows/ 文件夹
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
