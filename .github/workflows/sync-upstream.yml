@@ -38,7 +38,10 @@ jobs:
 
       - name: 排除 `.github/workflows/` 目录的变更
         run: |
-          find .github/workflows -type f | xargs git update-index --skip-worktree
+          git update-index --skip-worktree .github/workflows/docker-build.yml
+          git update-index --skip-worktree .github/workflows/main.yml
+          git update-index --skip-worktree .github/workflows/release.yml
+          git update-index --skip-worktree .github/workflows/sync-upstream.yml
 
       - name: 合并上游代码
         run: |
@@ -47,7 +50,10 @@ jobs:
 
       - name: 再次排除 `.github/workflows/`
         run: |
-          find .github/workflows -type f | xargs git update-index --skip-worktree
+          git update-index --skip-worktree .github/workflows/docker-build.yml
+          git update-index --skip-worktree .github/workflows/main.yml
+          git update-index --skip-worktree .github/workflows/release.yml
+          git update-index --skip-worktree .github/workflows/sync-upstream.yml
 
       - name: 推送到 Fork 仓库
         env:
