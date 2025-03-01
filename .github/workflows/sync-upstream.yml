@@ -44,6 +44,7 @@ jobs:
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
           git reset .github/workflows/
+          git clean -fd .github/workflows/  # 清理未追踪的文件
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
 
       - name: 推送到 Fork 仓库
