@@ -11,6 +11,6 @@ zw9999.cnstream.top
 zsntlqj.xicp.net
 chinamobile.com
 antvlive.ab5c6921.cdnviet.com
-:35455/
-rtmp://
+\:35455
+rtmp\:
 php.jdshipin.com
