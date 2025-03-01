@@ -45,9 +45,6 @@ jobs:
           git reset --hard HEAD  # 还原所有未提交的更改
           git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
           git fetch upstream
-          # 标记工作流文件为不被修改
-          git update-index --skip-worktree .github/workflows/*
-          git update-index --assume-unchanged .github/workflows/*
           git merge upstream/master --allow-unrelated-histories --strategy-option theirs -X theirs # 自动覆盖本地修改 合并上游的 master 分支，一般可能是main或者master
 
       - name: 排除工作流文件
