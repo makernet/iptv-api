@@ -44,7 +44,6 @@ jobs:
           git rm -r --cached .github/workflows/  # 从 Git 的跟踪中移除该文件夹
           rm -r .github/workflows/  # 删除本地 .github/workflows/ 文件夹
           # 标记工作流文件为不被修改
-          git update-index --skip-worktree .github/workflows/*
           git update-index --assume-unchanged .github/workflows/*
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
