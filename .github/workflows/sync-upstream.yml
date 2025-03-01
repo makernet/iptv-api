@@ -23,33 +23,30 @@ jobs:
         run: |
           git config --global credential.helper 'store'
           echo "https://github-actions[bot]:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
-          
+
       - name: 添加上游仓库
         run: |
-          git remote add upstream https://github.com/Guovin/iptv-api.git
+          git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
+          git reset --hard HEAD  # 还原所有未提交的更改
+          git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
           git fetch upstream
+          git merge upstream/master --allow-unrelated-histories --strategy-option theirs -X theirs # 自动覆盖本地修改 合并上游的 master 分支，一般可能是main或者master
 
-      - name: 重置并恢复 `.github/workflows/` 文件
+      - name: 排除工作流文件
         run: |
-          git restore --source=HEAD --staged .github/workflows/
-          git restore --source=HEAD .github/workflows/
-          git reset HEAD .github/workflows/
-          git checkout .github/workflows/
-
-      - name: 排除 `.github/workflows/` 目录的变更
-        run: |
+          # 标记工作流文件为不被修改
           git update-index --skip-worktree .github/workflows/docker-build.yml
           git update-index --skip-worktree .github/workflows/main.yml
           git update-index --skip-worktree .github/workflows/release.yml
           git update-index --skip-worktree .github/workflows/sync-upstream.yml
-
-      - name: 合并上游代码
-        run: |
-          git checkout master
-          git merge upstream/master --allow-unrelated-histories -X theirs
-
-      - name: 再次排除 `.github/workflows/`
-        run: |
+          # 确保不添加这些文件
+          git add .  # 添加所有更改的文件
+          git reset .github/workflows/  # 重置 .github/workflows/ 目录下的所有文件
+          git update-index --assume-unchanged .github/workflows/*
+          git update-index --no-assume-unchanged .github/workflows/*
+          git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
+          
+          # 再次标记，确保不被修改
           git update-index --skip-worktree .github/workflows/docker-build.yml
           git update-index --skip-worktree .github/workflows/main.yml
           git update-index --skip-worktree .github/workflows/release.yml
@@ -59,4 +56,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git push origin master --force
+          git push origin master --force # 这里改为你的上游主要分支，一般可能是main或者master
