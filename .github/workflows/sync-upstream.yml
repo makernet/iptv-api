@@ -36,22 +36,12 @@ jobs:
 
       - name: 排除工作流文件
         run: |
-          git reset .github/workflows/
-          git restore .github/workflows/*
           # 标记工作流文件为不被修改
           git update-index --skip-worktree .github/workflows/*
           git update-index --assume-unchanged .github/workflows/*
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
-          git reset .github/workflows/  # 重置 .github/workflows/ 目录下的所有文件
-          git restore .github/workflows/*
-          git update-index --assume-unchanged .github/workflows/*
-          git update-index --no-assume-unchanged .github/workflows/*
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
-          
-          # 再次标记，确保不被修改
-          git update-index --skip-worktree .github/workflows/*
-          git update-index --assume-unchanged .github/workflows/*
 
       - name: 推送到 Fork 仓库
         env:
