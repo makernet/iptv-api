@@ -24,10 +24,10 @@ jobs:
           git remote add upstream https://github.com/Guovin/iptv-api.git
           git fetch upstream
 
-      - name: 恢复 `.github/workflows/` 到上次提交的状态
+      - name: 重置并恢复 `.github/workflows/` 文件
         run: |
-          git restore --staged .github/workflows/
-          git restore .github/workflows/
+          git restore --source=HEAD --staged .github/workflows/
+          git restore --source=HEAD .github/workflows/
           git reset HEAD .github/workflows/
           git checkout .github/workflows/
 
@@ -40,7 +40,7 @@ jobs:
           git checkout master
           git merge upstream/master --allow-unrelated-histories -X theirs
 
-      - name: 重新排除 `.github/workflows/`
+      - name: 再次排除 `.github/workflows/`
         run: |
           find .github/workflows -type f | xargs git update-index --skip-worktree
 
