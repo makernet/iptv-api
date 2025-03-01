@@ -34,8 +34,21 @@ jobs:
 
       - name: 排除工作流文件
         run: |
-          # 恢复工作流文件到上次提交的状态
-          git checkout HEAD -- .github/workflows/
+          # 标记工作流文件为不被修改
+          git update-index --assume-unchanged .github/workflows/
+          
+          # 排除工作流文件的修改，恢复它们到上次提交的状态
+          git reset HEAD .github/workflows/  # 排除.github工作流文件的修改
+          git checkout .github/workflows/    # 重新恢复.github工作流文件的原始状态
+          
+          # 删除 Git 中的工作流文件
+          git rm -r --cached .github/workflows/  # 删除 Git 中的工作流文件
+          git add .                # 添加其它文件
+          git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
+          
+          # 标记工作流文件为不被修改，确保它们不会被推送
+          git update-index --assume-unchanged .github/workflows/
+          git check-ignore -v .github/workflows/*
 
       - name: 推送到 Fork 仓库
         env:
