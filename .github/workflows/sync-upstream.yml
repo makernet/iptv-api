@@ -34,6 +34,7 @@ jobs:
 
       - name: 排除工作流文件
         run: |
+          git reset .github/workflows/
           # 标记工作流文件为不被修改
           git update-index --skip-worktree .github/workflows/docker-build.yml
           git update-index --skip-worktree .github/workflows/main.yml
