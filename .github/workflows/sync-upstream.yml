@@ -24,14 +24,25 @@ jobs:
           git remote add upstream https://github.com/Guovin/iptv-api.git
           git fetch upstream
 
+      - name: 恢复 `.github/workflows/` 到上次提交的状态
+        run: |
+          git restore --staged .github/workflows/
+          git restore .github/workflows/
+          git reset HEAD .github/workflows/
+          git checkout .github/workflows/
+
       - name: 排除 `.github/workflows/` 目录的变更
         run: |
-          git update-index --skip-worktree .github/workflows/*
+          find .github/workflows -type f | xargs git update-index --skip-worktree
 
       - name: 合并上游代码
         run: |
           git checkout master
-          git merge upstream/master -X theirs --allow-unrelated-histories
+          git merge upstream/master --allow-unrelated-histories -X theirs
+
+      - name: 重新排除 `.github/workflows/`
+        run: |
+          find .github/workflows -type f | xargs git update-index --skip-worktree
 
       - name: 推送到 Fork 仓库
         env:
