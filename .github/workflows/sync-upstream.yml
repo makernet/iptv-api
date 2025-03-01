@@ -30,7 +30,8 @@ jobs:
           git reset --hard HEAD  # 还原所有未提交的更改
           git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
           git fetch upstream
-          git update-index --skip-worktree .github/workflows/
+          git update-index --skip-worktree .github/workflows/*
+          git update-index --assume-unchanged .github/workflows/*
           git update-index --skip-worktree .github/workflows/docker-build.yml
           git update-index --skip-worktree .github/workflows/main.yml
           git update-index --skip-worktree .github/workflows/release.yml
@@ -40,6 +41,7 @@ jobs:
       - name: 排除工作流文件
         run: |
           git reset .github/workflows/
+          git restore .github/workflows/*
           # 标记工作流文件为不被修改
           git update-index --skip-worktree .github/workflows/docker-build.yml
           git update-index --skip-worktree .github/workflows/main.yml
@@ -48,6 +50,7 @@ jobs:
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
           git reset .github/workflows/  # 重置 .github/workflows/ 目录下的所有文件
+          git restore .github/workflows/*
           git update-index --assume-unchanged .github/workflows/*
           git update-index --no-assume-unchanged .github/workflows/*
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
