@@ -26,7 +26,11 @@ jobs:
 
       - name: 添加上游仓库
         run: |
+          git sparse-checkout init --cone
+          echo "!.github/workflows/" >> .git/info/sparse-checkout
+          git read-tree -mu HEAD
           git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
+          git update-index --skip-worktree .github/workflows/
           git fetch upstream
           git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
           git fetch upstream
@@ -34,9 +38,10 @@ jobs:
 
       - name: 排除工作流文件
         run: |
-          echo ".github/workflows/" >> .git/info/exclude  # 永久忽略
           git reset HEAD .github/workflows/  # 排除.github工作流文件的修改
+          git restore --staged .github/workflows/
           git checkout .github/workflows/    # 重新恢复.github工作流文件的原始状态
+          git update-index --no-skip-worktree .github/workflows/
           git add .                # 添加其它文件
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
 
