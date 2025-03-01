@@ -26,8 +26,6 @@ jobs:
 
       - name: 添加上游仓库
         run: |
-          grep -qxF '.github/workflows/' .gitignore || echo '.github/workflows/' >> .gitignore
-          grep -qxF '.github/workflows/* merge=ours' .gitattributes || echo '.github/workflows/* merge=ours' >> .gitattributes
           git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
           git reset --hard HEAD  # 还原所有未提交的更改
           git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
@@ -42,6 +40,9 @@ jobs:
           # 合并完成后标记工作流文件为不被修改
           git update-index --skip-worktree .github/workflows/*
           git update-index --assume-unchanged .github/workflows/*
+          grep -qxF '.github/workflows/' .gitignore || echo '.github/workflows/' >> .gitignore
+          grep -qxF '.github/workflows/* merge=ours' .gitattributes || echo '.github/workflows/* merge=ours' >> .gitattributes
+          git restore --staged .github/workflows/
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
