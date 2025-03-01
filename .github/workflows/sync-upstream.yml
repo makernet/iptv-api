@@ -38,8 +38,8 @@ jobs:
       - name: 排除工作流文件
         run: |
           # 合并完成后标记工作流文件为不被修改
-          grep -qxF '.github/workflows/' .gitignore || echo '.github/workflows/' >> .gitignore
-          grep -qxF '.github/workflows/* merge=ours' .gitattributes || echo '.github/workflows/* merge=ours' >> .gitattributes
+          grep -qxF '.github/workflows/' .gitignore || echo -e '\n.github/workflows/' >> .gitignore
+          grep -qxF '.github/workflows/* merge=ours' .gitattributes || echo -e '\n.github/workflows/* merge=ours' >> .gitattributes
           git restore --staged .github/workflows/
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
