@@ -1,0 +1,47 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天 00:00 UTC 运行
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出你的 Fork 仓库
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: 配置 Git 用户信息
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: 配置 GitHub 身份验证
+        run: |
+          git config --global credential.helper 'store'
+          echo "https://github-actions[bot]:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+
+      - name: 添加上游仓库
+        run: |
+          git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
+          git fetch upstream
+          git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
+          git fetch upstream
+          git merge upstream/master --allow-unrelated-histories --strategy-option theirs -X theirs # 自动覆盖本地修改 合并上游的 master 分支，一般可能是main或者master
+
+      - name: 排除工作流文件
+        run: |
+          echo ".github/workflows/" >> .git/info/exclude  # 永久忽略
+          git reset HEAD .github/workflows/  # 排除.github工作流文件的修改
+          git checkout .github/workflows/    # 重新恢复.github工作流文件的原始状态
+          git add .                # 添加其它文件
+          git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
+
+      - name: 推送到 Fork 仓库
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin master --force # 这里改为你的上游主要分支，一般可能是main或者master
