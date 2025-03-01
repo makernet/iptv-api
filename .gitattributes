@@ -1,2 +1,3 @@
 *.sh linguist-language=Python
 Dockerfile linguist-language=Python
+.github/workflows/* merge=ours
