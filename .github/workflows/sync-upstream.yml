@@ -47,7 +47,6 @@ jobs:
           
           # 标记工作流文件为不被修改，确保它们不会被推送
           git update-index --assume-unchanged .github/workflows/
-          git check-ignore -v .github/workflows/*
 
       - name: 推送到 Fork 仓库
         env:
