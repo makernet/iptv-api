@@ -26,26 +26,18 @@ jobs:
 
       - name: 添加上游仓库
         run: |
-          git sparse-checkout init --cone
-          echo "!.github/workflows/" >> .git/info/sparse-checkout
-          git read-tree -mu HEAD
-          git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
-          git update-index --skip-worktree .github/workflows/
-          git fetch upstream
-          git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
-          git fetch upstream
-          git merge upstream/master --allow-unrelated-histories --strategy-option theirs -X theirs # 自动覆盖本地修改 合并上游的 master 分支，一般可能是main或者master
+	    git remote add upstream https://github.com/Guovin/iptv-api.git
+	    git fetch upstream
+	    git checkout master
+	    git merge upstream/master --allow-unrelated-histories --strategy-option theirs -X theirs
 
       - name: 排除工作流文件
         run: |
-          if [ -d ".github/workflows" ]; then
-            git reset HEAD .github/workflows/
-            git restore --staged .github/workflows/
-            git checkout .github/workflows/
-          fi
-          git update-index --no-skip-worktree .github/workflows/
-          git add .                # 添加其它文件
-          git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
+	    git reset HEAD .github/workflows/  # 确保 .github/workflows/ 不被加入暂存区
+	    git restore --staged .github/workflows/  # 取消暂存
+	    git checkout .github/workflows/  # 恢复 .github/workflows/ 为原始状态
+	    git add .  # 添加其他文件
+	    git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
 
       - name: 推送到 Fork 仓库
         env:
