@@ -24,6 +24,13 @@ jobs:
           git config --global credential.helper 'store'
           echo "https://github-actions[bot]:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
 
+      - name: 移除 .github/workflows/ 的 Git 追踪
+        run: |
+          git rm -r --cached .github/workflows/ || true
+          grep -qxF '.github/workflows/' .gitignore || echo -e '\n.github/workflows/' >> .gitignore
+          git add .gitignore
+          git commit -m "Remove .github/workflows/ from Git tracking" || true
+
       - name: 添加上游仓库
         run: |
           grep -qxF '.github/workflows/' .gitignore || echo -e '\n.github/workflows/' >> .gitignore
@@ -46,9 +53,11 @@ jobs:
       - name: 排除工作流文件
         run: |
           # 合并完成后标记工作流文件为不被修改
+          git rm -r --cached .github/workflows/ || true
           grep -qxF '.github/workflows/' .gitignore || echo -e '\n.github/workflows/' >> .gitignore
           grep -qxF '.github/workflows/* merge=ours' .gitattributes || echo -e '\n.github/workflows/* merge=ours' >> .gitattributes
-          git restore --staged .github/workflows/
+          git add .gitignore
+          git add .gitattributes
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
