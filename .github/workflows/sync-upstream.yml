@@ -28,6 +28,9 @@ jobs:
         run: |
           grep -qxF '.github/workflows/' .gitignore || echo -e '\n.github/workflows/' >> .gitignore
           grep -qxF '.github/workflows/* merge=ours' .gitattributes || echo -e '\n.github/workflows/* merge=ours' >> .gitattributes
+          git add .gitignore
+          git add .gitattributes
+          git commit -m "Set .github/workflows/* to always use local version"
           cat .gitignore
           cat .gitattributes
           ls -al
