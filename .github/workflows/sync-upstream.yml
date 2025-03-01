@@ -34,8 +34,10 @@ jobs:
 
       - name: 排除工作流文件
         run: |
+          git update-index --assume-unchanged .github/workflows/
           git reset HEAD .github/workflows/  # 排除.github工作流文件的修改
           git checkout .github/workflows/    # 重新恢复.github工作流文件的原始状态
+          git update-index --assume-unchanged .github/workflows/
           git rm -r --cached .github/workflows/  # 删除 Git 中的工作流文件
           git add .                # 添加其它文件
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
