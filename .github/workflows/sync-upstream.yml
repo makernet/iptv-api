@@ -38,10 +38,9 @@ jobs:
       - name: 排除工作流文件
         run: |
           # 合并完成后标记工作流文件为不被修改
-          git rm -r --cached .github/workflows/ 
-          rm -r .github/workflows/  # 删除本地 .github/workflows/ 文件夹
           git update-index --skip-worktree .github/workflows/*
           git update-index --assume-unchanged .github/workflows/*
+          grep -qxF '.github/workflows/' .gitignore || echo '.github/workflows/' >> .gitignore
           # 确保不添加这些文件
           git add .  # 添加所有更改的文件
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
