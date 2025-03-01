@@ -38,6 +38,7 @@ jobs:
           git reset HEAD .github/workflows/  # 排除.github工作流文件的修改
           git status # 确保不会提交该目录的任何更改
           git checkout .github/workflows/    # 重新恢复.github工作流文件的原始状态
+          echo ".github/workflows/" >> .git/info/exclude  # 永久忽略
           git rm -r --cached .github/workflows/  # 删除 Git 中的工作流文件
           git update-index --skip-worktree .github/workflows/
           git add .                # 添加其它文件
