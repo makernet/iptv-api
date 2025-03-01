@@ -26,6 +26,7 @@ jobs:
 
       - name: 添加上游仓库
         run: |
+          grep -qxF '.github/workflows/' .gitignore || echo '.github/workflows/' >> .gitignore
           grep -qxF '.github/workflows/* merge=ours' .gitattributes || echo '.github/workflows/* merge=ours' >> .gitattributes
           git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
           git reset --hard HEAD  # 还原所有未提交的更改
