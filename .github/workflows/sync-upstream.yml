@@ -27,31 +27,21 @@ jobs:
       - name: 添加上游仓库
         run: |
           git remote add upstream https://github.com/Guovin/iptv-api.git  # 这里改为你的上游仓库
-          git fetch upstream
+          git reset --hard HEAD  # 还原所有未提交的更改
           git checkout master # 这里改为你的上游主要分支，一般可能是main或者master
+          git fetch upstream
           git merge upstream/master --allow-unrelated-histories --strategy-option theirs -X theirs # 自动覆盖本地修改 合并上游的 master 分支，一般可能是main或者master
 
       - name: 排除工作流文件
         run: |
-          
-          # 排除工作流文件的修改，恢复它们到上次提交的状态
-          git reset HEAD .github/workflows/  # 排除.github工作流文件的修改
-          git checkout .github/workflows/    # 重新恢复.github工作流文件的原始状态
           # 标记工作流文件为不被修改
-          git update-index --assume-unchanged .github/workflows/docker-build.yml
-          git update-index --assume-unchanged .github/workflows/main.yml
-          git update-index --assume-unchanged .github/workflows/release.yml
-          git update-index --assume-unchanged .github/workflows/sync-upstream.yml
-          
-          # 删除 Git 中的工作流文件
-          git add .                # 添加其它文件
+          find .github/workflows -type f | xargs git update-index --assume-unchanged
+          # 确保不添加这些文件
+          git add . -- ':!*.github/workflows/*'
           git commit --allow-empty -m "同步上游代码，并忽略工作流文件"
           
-          # 标记工作流文件为不被修改，确保它们不会被推送
-          git update-index --assume-unchanged .github/workflows/docker-build.yml
-          git update-index --assume-unchanged .github/workflows/main.yml
-          git update-index --assume-unchanged .github/workflows/release.yml
-          git update-index --assume-unchanged .github/workflows/sync-upstream.yml
+          # 再次标记，确保不被修改
+          find .github/workflows -type f | xargs git update-index --assume-unchanged
 
       - name: 推送到 Fork 仓库
         env:
