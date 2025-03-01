@@ -24,12 +24,9 @@ jobs:
           git remote add upstream https://github.com/Guovin/iptv-api.git
           git fetch upstream
 
-      - name: 启用稀疏检出（跳过 `.github/workflows/`）
+      - name: 排除 `.github/workflows/` 目录的变更
         run: |
-          git sparse-checkout init --cone
-          echo '/*' > .git/info/sparse-checkout
-          echo '!/.github/workflows/' >> .git/info/sparse-checkout
-          git read-tree -mu HEAD
+          git update-index --skip-worktree .github/workflows/*
 
       - name: 合并上游代码
         run: |
