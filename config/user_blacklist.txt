@@ -13,3 +13,4 @@ chinamobile.com
 antvlive.ab5c6921.cdnviet.com
 35455
 php.jdshipin.com
+.freetv.top
