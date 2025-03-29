@@ -87,6 +87,7 @@ jobs:
           if [[ -f "output/cache.pkl" ]]; then
             git add -f "output/cache.pkl"
           fi
+          ls -l output/  # 确保 sort.log 存在
           if [[ -f "output/sort.log" ]]; then
             git add -f "output/sort.log"
           fi
